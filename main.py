@@ -19,10 +19,20 @@ driver.get("https://orteil.dashnet.org/cookieclicker/")
 driver.implicitly_wait(5)
 
 cookie = driver.find_element(By.ID, "bigCookie")
+items = []
+
 count = 0
 
 while count < 50:
     cookie.click()
+
+    try:
+        items = driver.find_elements(By.CLASS_NAME, "enabled")
+        for item in items[::-1]:
+            item.click()
+    except:
+        print("Not enough cookies")
+
     count = int(driver.find_element(By.ID, "cookies").text.split(" ")[0])
 
 sleep(2)
