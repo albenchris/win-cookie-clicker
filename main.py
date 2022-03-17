@@ -1,4 +1,3 @@
-
 # Created by Alex Christopherson on March 17, 2022
 
 from webdriver_manager.chrome import ChromeDriverManager
@@ -17,10 +16,15 @@ s = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=s, options=chrome_options)
 
 driver.get("https://orteil.dashnet.org/cookieclicker/")
+driver.implicitly_wait(5)
 
+cookie = driver.find_element(By.ID, "bigCookie")
+count = 0
+
+while count < 50:
+    cookie.click()
+    count = int(driver.find_element(By.ID, "cookies").text.split(" ")[0])
 
 sleep(2)
 
 driver.quit()
-
-
