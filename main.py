@@ -42,7 +42,7 @@ def buy_upgrade():
                 all_upgrades.append(u)
 
     if len(all_upgrades) > 0:
-        print("upgrades:", len(all_upgrades))
+        # print("upgrades:", len(all_upgrades))
         for u in all_upgrades:
             upgrade_actions = ActionChains(driver)
             upgrade_actions.move_to_element(u)
@@ -50,30 +50,36 @@ def buy_upgrade():
             upgrade_actions.perform()
 
 
-# def click_golden_cookie():
-#     try:
-#         golden_cookie = driver.find_element(By.CLASS_NAME, "shimmer")
-#         if golden_cookie.is_displayed():
-#             print("found golden cookie")
-#             golden_actions = ActionChains(driver)
-#             golden_actions.move_to_element(golden_cookie)
-#             golden_actions.click()
-#             golden_actions.perform()
-#     except Exception as e:
-#         print("", end="")
-#     finally:
-#         print("", end="")
+def click_golden_cookie():
+    driver.implicitly_wait(0)
+    try:
+        golden_cookie = driver.find_element(By.CLASS_NAME, "shimmer")
+        if golden_cookie.is_displayed():
+            print("found golden cookie")
+            golden_actions = ActionChains(driver)
+            golden_actions.move_to_element(golden_cookie)
+            golden_actions.click()
+            golden_actions.perform()
+    except Exception as e:
+        print("", end="")
+    finally:
+        print("", end="")
 
 
-while count < 500:
+# while count < 500:
+while True:
     actions.click(cookie)
 
-    # click_golden_cookie()
+    click_golden_cookie()
 
     buy_upgrade()
 
     actions.perform()
-    count = int(driver.find_element(By.ID, "cookies").text.split(" ")[0])
+
+    try:
+        count = int(driver.find_element(By.ID, "cookies").text.split(" ")[0])
+    except ValueError:
+        print("", end="")
 
     # if keyboard.is_pressed("q"):
     #     driver.quit()
