@@ -44,16 +44,25 @@ def buy_product():
 
 
 def buy_upgrade():
-    if count >= 100:
-        try:
-            upgrades = driver.find_elements(By.CLASS_NAME, "upgrade")
+    if count > 100:
+        upgrades = [
+            driver.find_element(
+                By.ID,
+                "upgrade" + str(i)
+            ) for i in range(1, -1, -1)
+        ]
+
+        for upgrade in upgrades:
             print("upgrades", upgrades)
-        except:
-            i = 1
+            upgrade_actions = ActionChains(driver)
+            upgrade_actions.move_to_element(upgrade)
+            upgrade_actions.click()
+            upgrade_actions.perform()
 
 
 def click_golden_cookie():
     golden_cookie = driver.find_element(By.CLASS_NAME, "shimmer")
+
 
 while count < 120:
     # cookie.click()
@@ -62,18 +71,9 @@ while count < 120:
     buy_product()
     buy_upgrade()
 
-    # items = list(dict.fromkeys([driver.find_element(By.ID, "productPrice" + str(i)) for i in range(1, -1, -1)]))
-    # for item in items:
-    #     value = int(item.text)
-    #     if value <= count:
-    #         upgrade_actions = ActionChains(driver)
-    #         upgrade_actions.move_to_element(item)
-    #         upgrade_actions.click()
-    #         upgrade_actions.perform()
-
     actions.perform()
     count = int(driver.find_element(By.ID, "cookies").text.split(" ")[0])
 
-sleep(2)
 
+sleep(2)
 driver.quit()
