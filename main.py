@@ -41,14 +41,13 @@ def buy_upgrade():
             if u.get_attribute("class").__contains__("enabled"):
                 all_upgrades.append(u)
 
-    # print("upgrades:", len(all_upgrades))
     if len(all_upgrades) > 0:
+        print("upgrades:", len(all_upgrades))
         for u in all_upgrades:
             upgrade_actions = ActionChains(driver)
             upgrade_actions.move_to_element(u)
             upgrade_actions.click()
             upgrade_actions.perform()
-
 
 
 # def click_golden_cookie():
@@ -69,8 +68,6 @@ def buy_upgrade():
 while count < 500:
     actions.click(cookie)
 
-    # buy_product()
-    # buy_upgrade()
     # click_golden_cookie()
 
     buy_upgrade()
