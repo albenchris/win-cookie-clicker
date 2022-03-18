@@ -23,33 +23,34 @@ actions = ActionChains(driver)
 
 cookie = driver.find_element(By.ID, "bigCookie")
 
-count = 0
 
-
+# Created by Alex Christopherson on March 17, 2022
+# Modified by Alex Christopherson on March 18, 2022
 def buy_upgrade():
-    all_upgrades = []
+    driver.implicitly_wait(0)
+    
+    try:
+        upgrades = driver.find_elements(By.CLASS_NAME, "upgrade")
+        for u in upgrades:
+            if u.get_attribute("class").__contains__("enabled"):
+                upgrade_actions = ActionChains(driver)
+                upgrade_actions.move_to_element(u)
+                upgrade_actions.click()
+                upgrade_actions.perform()
+    except Exception as e:
+        print("", end="")
 
     products = driver.find_elements(By.CLASS_NAME, "product")
     for p in products:
         if p.get_attribute("class").__contains__("enabled"):
-            all_upgrades.append(p)
-
-    if count > 20:
-        upgrades = driver.find_elements(By.CLASS_NAME, "upgrade")
-
-        for u in upgrades:
-            if u.get_attribute("class").__contains__("enabled"):
-                all_upgrades.append(u)
-
-    if len(all_upgrades) > 0:
-        # print("upgrades:", len(all_upgrades))
-        for u in all_upgrades:
             upgrade_actions = ActionChains(driver)
-            upgrade_actions.move_to_element(u)
+            upgrade_actions.move_to_element(p)
             upgrade_actions.click()
             upgrade_actions.perform()
 
 
+# Created by Alex Christopherson on March 17, 2022
+# Modified by Alex Christopherson on March 18, 2022
 def click_golden_cookie():
     driver.implicitly_wait(0)
     try:
@@ -62,13 +63,13 @@ def click_golden_cookie():
             golden_actions.perform()
     except Exception as e:
         print("", end="")
-    finally:
-        print("", end="")
 
 
-# while count < 500:
-while True:
+playing = True
+
+while playing:
     actions.click(cookie)
+    actions.double_click(cookie)
 
     click_golden_cookie()
 
@@ -76,13 +77,8 @@ while True:
 
     actions.perform()
 
-    try:
-        count = int(driver.find_element(By.ID, "cookies").text.split(" ")[0])
-    except ValueError:
-        print("", end="")
-
-    # if keyboard.is_pressed("q"):
-    #     driver.quit()
+    if keyboard.is_pressed("q"):
+        playing = False
 
 sleep(2)
 driver.quit()
