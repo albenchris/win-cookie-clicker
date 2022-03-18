@@ -1,5 +1,4 @@
 # Created by Alex Christopherson on March 17, 2022
-
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
@@ -8,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
 from time import sleep
+import keyboard
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--start-maximized")
@@ -36,7 +36,7 @@ def buy_product():
     for product in products:
         value = int(product.text)
         if value <= count:
-            print("products", products)
+            # print("products", products)
             upgrade_actions = ActionChains(driver)
             upgrade_actions.move_to_element(product)
             upgrade_actions.click()
@@ -53,7 +53,7 @@ def buy_upgrade():
         ]
 
         for upgrade in upgrades:
-            print("upgrades", upgrades)
+            # print("upgrades", upgrades)
             upgrade_actions = ActionChains(driver)
             upgrade_actions.move_to_element(upgrade)
             upgrade_actions.click()
@@ -61,19 +61,32 @@ def buy_upgrade():
 
 
 def click_golden_cookie():
-    golden_cookie = driver.find_element(By.CLASS_NAME, "shimmer")
+    try:
+        golden_cookie = driver.find_element(By.CLASS_NAME, "shimmer")
+        if golden_cookie.is_displayed():
+            print("found golden cookie")
+            golden_actions = ActionChains(driver)
+            golden_actions.move_to_element(golden_cookie)
+            golden_actions.click()
+            golden_actions.perform()
+    except Exception as e:
+        print("", end="")
+    finally:
+        print("", end="")
 
 
-while count < 120:
-    # cookie.click()
+while count < 500:
     actions.click(cookie)
 
     buy_product()
     buy_upgrade()
+    # click_golden_cookie()
 
     actions.perform()
     count = int(driver.find_element(By.ID, "cookies").text.split(" ")[0])
 
+    # if keyboard.is_pressed("q"):
+    #     driver.quit()
 
 sleep(2)
 driver.quit()
